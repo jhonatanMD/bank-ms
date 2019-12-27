@@ -18,13 +18,11 @@ import reactor.core.publisher.Mono;
 
 @Component
 @Qualifier("webClient")
-public class CallWebClient {
+public  class CallWebClient {
 	String msg = "";
 	
 	  WebClient client = WebClient.builder().baseUrl("http://localhost:8881")
 			  .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).build();
-	  
-	  
 	  
   public Mono<InfoResponse> Response(List<String> numDoc){
 	  msg = "";  
@@ -64,8 +62,17 @@ public class CallWebClient {
 	  }
 
   
-  public Flux<EntityCreditCard> getCreditPersonalByNumDoc(String numDoc){
-		return  client.get().uri("/api/getCreditCardNumDoc/"+numDoc)
-			.retrieve().bodyToFlux(EntityCreditCard.class);	
-	  }
+  		public Flux<EntityCreditPersonal> getCreditPersonal(){
+  			return  client.get().uri("/personal-credit/api/getCreditPersonal")
+			.retrieve().bodyToFlux(EntityCreditPersonal.class).filter( p -> p.getStatus().equals("1"));	
+  		}
+  		
+  	
+  		public Mono<EntityCreditPersonal> putCreditPersonal(EntityCreditPersonal body){
+  			return  client.put().uri("/personal-credit/api/postCreditPersonal").syncBody(body)
+			.retrieve().bodyToMono(EntityCreditPersonal.class);	
+  		}
+  		
+
+		
 }

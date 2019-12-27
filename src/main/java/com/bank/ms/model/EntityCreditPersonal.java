@@ -1,9 +1,14 @@
 package com.bank.ms.model;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
+
 public class EntityCreditPersonal {
 	
 	
-	private String codCur;
+private String codCur;
 	
 	private String numCredi;
 	
@@ -13,8 +18,12 @@ public class EntityCreditPersonal {
 	
 	private HeadLineEntity  customer;
 	
-	private String status;
+	@JsonFormat(pattern = "yyyy-MM-dd", shape = Shape.STRING)
+	private Date dateCredit;
+	
 
+
+	private String status;
 	public String getCodCur() {
 		return codCur;
 	}
@@ -22,6 +31,8 @@ public class EntityCreditPersonal {
 	public void setCodCur(String codCur) {
 		this.codCur = codCur;
 	}
+
+	
 
 	public String getNumCredi() {
 		return numCredi;
@@ -38,7 +49,7 @@ public class EntityCreditPersonal {
 	public void setCash(Double cash) {
 		this.cash = cash;
 	}
-
+		
 	public Double getCashPay() {
 		return cashPay;
 	}
@@ -54,6 +65,16 @@ public class EntityCreditPersonal {
 	public void setCustomer(HeadLineEntity customer) {
 		this.customer = customer;
 	}
+	
+	public Date getDateCredit() {
+		return dateCredit;
+	}
+
+	public void setDateCredit(Date dateCredit) {
+		this.dateCredit = dateCredit;
+	}
+
+
 
 	public String getStatus() {
 		return status;
@@ -63,10 +84,6 @@ public class EntityCreditPersonal {
 		this.status = status;
 	}
 
-
-
-
-
-
+	
 
 }
