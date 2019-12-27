@@ -23,18 +23,18 @@ public class BankMsApplication {
 			
 			System.out.println("hola");
 			
-			 callWeb.getCreditPersonalByNumDoc("77112233").flatMap(p ->{
+			/* callWeb.getCreditPersonalByNumDoc("77112233").flatMap(p ->{
 				 System.out.println(p.getStatus());
 				 return Mono.just(p.getStatus());
-			 }).subscribe();
+			 }).subscribe();*/
 		}
 	};
 	public static void main(String[] args) {
 		SpringApplication.run(BankMsApplication.class, args);
 		
-			Timer timer =new  Timer();
+		/*	Timer timer =new  Timer();
 		timer.schedule(task,1000, 7000); 
-		
+		*/
 	}
 
 }

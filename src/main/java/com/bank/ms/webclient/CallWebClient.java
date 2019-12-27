@@ -1,5 +1,7 @@
 package com.bank.ms.webclient;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -19,48 +21,42 @@ import reactor.core.publisher.Mono;
 public class CallWebClient {
 	String msg = "";
 	
-	  WebClient client = WebClient.builder().baseUrl("http://localhost:8010")
+	  WebClient client = WebClient.builder().baseUrl("http://localhost:8881")
 			  .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).build();
 	  
 	  
 	  
-  public Mono<InfoResponse> Response(String numDoc){
-		  
+  public Mono<InfoResponse> Response(List<String> numDoc){
+	  msg = "";  
 		InfoResponse  response = new InfoResponse();
-	
-			  return    client.get().uri("/credit-card/api/getCreditCardNumDoc/"+numDoc)
+		response.setMsg("");
+			  return    client.post().uri("/credit-card/api/creditCardByNumDocList/0").syncBody(numDoc)
 						.retrieve().bodyToFlux(EntityCreditCard.class).collectList().flatMap(card -> {
-							card.forEach(p ->{
-								if(p.getCustomer().getDniH().equals(numDoc)  && p.getStatus().equals("0")) {
-									msg= " DEUDA EN TARJETA DE CREDITO ";
-								}
-							});
+								if(card.size() > 0) {
+								msg= " DEUDA EN TARJETA DE CREDITO ";
 								 response.setMsg(msg);
+								}
 								return Mono.just(response);
 				
 					}).switchIfEmpty(Mono.just(response)).flatMap(p4->{
 						
-						return  client.get().uri("/personal-credit/api/getCreditPersonalNumDoc/"+numDoc)
+						return  client.post().uri("/personal-credit/api/creditPersonalByNumDocList/0").syncBody(numDoc)
 								.retrieve().bodyToFlux(EntityCreditPersonal.class).collectList().flatMap(creditPer -> {
-									creditPer.forEach(dt ->{
-										if(dt.getCustomer().getDniH().equals(numDoc)  && dt.getStatus().equals("0")) {
-											msg += "- DEUDA EN CREDITO PERSONA ";
-										}
-									});
+									if(creditPer.size() > 0) {		
+									msg += "- DEUDA EN CREDITO PERSONA ";
 									response.setMsg(msg);
+									}
 									return Mono.just(response);
 								});
 						
 							}).switchIfEmpty(Mono.just(response)).flatMap(p5->{
 								
-								return  client.get().uri("/business-credit/api/getBusinessCrediDoc/"+numDoc)
-										.retrieve().bodyToFlux(EntityBusinessCredit.class).collectList().flatMap(creditBusi -> {
-											creditBusi.forEach(dt ->{
-												if(dt.getCustomer().getRuc().equals(numDoc)  && dt.getStatus().equals("0")) {
-													msg += " - DEUDA EN CREDITO EMPRESA ";
-												}
-											});
+								return  client.post().uri("/business-credit/api/creditBusinessByNumDocList/0").syncBody(numDoc)
+										.retrieve().bodyToFlux(EntityBusinessCredit.class).collectList().flatMap(creditBusi -> {	
+											if(creditBusi.size() > 0) {
+												msg += " - DEUDA EN CREDITO EMPRESA ";									
 											 	response.setMsg(msg);
+											}
 												return Mono.just(response);
 									}).switchIfEmpty(Mono.just(response));
 		

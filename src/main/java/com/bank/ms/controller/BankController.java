@@ -1,9 +1,11 @@
 package com.bank.ms.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,8 +22,8 @@ public class BankController {
 	@Autowired
 	CallWebClient webclient;
 	
-	@GetMapping("/getDeudas/{numDoc}")
-	public Mono<InfoResponse> getDeudas(@PathVariable("numDoc") String numDoc){
+	@PostMapping("/getDeudas")
+	public Mono<InfoResponse> getDeudas(@RequestBody List<String> numDoc){
 		return webclient.Response(numDoc);
 	}
 
