@@ -9,11 +9,14 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.bank.ms.model.CurrentEntity;
 import com.bank.ms.model.EntityBusinessCredit;
 import com.bank.ms.model.EntityCreditCard;
 import com.bank.ms.model.EntityCreditPersonal;
 import com.bank.ms.model.EntityDebtor;
+import com.bank.ms.model.EntityTransaction;
 import com.bank.ms.model.InfoResponse;
+import com.bank.ms.model.SavingEntity;
 import com.bank.ms.service.IDebtorService;
 
 import reactor.core.publisher.Flux;
@@ -29,7 +32,7 @@ public  class CallWebClient {
 	
 	EntityDebtor entityDebtor;
 	InfoResponse  response;
-	  WebClient client = WebClient.builder().baseUrl("http://localhost:8881")
+	  WebClient client = WebClient.builder().baseUrl("http://gateway:8881")
 			  .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).build();
 	  
   public Mono<EntityDebtor> Response(List<String> numDoc){
@@ -89,5 +92,19 @@ public  class CallWebClient {
   		}
   		
 
+  		public Mono<EntityTransaction> postTransacction(String typeAccount,String type,String numAccount,Double cash){
+  			return  client.post().uri("/transactions/api/transactions/"+numAccount+"/"+type+"/"+cash+"/"+typeAccount)
+			.retrieve().bodyToMono(EntityTransaction.class);	
+  		}
+
 		
+  		public Mono<SavingEntity> getSaving(String numAccount){
+  			return  client.get().uri("/saving-account/api/getSaving/"+numAccount)
+  					.retrieve().bodyToMono(SavingEntity.class);	
+  		}
+  		
+  		public Mono<CurrentEntity> getCurrent(String numAccount){
+  			return  client.get().uri("/current-account/api/getCurrentNumAcc/"+numAccount)
+  					.retrieve().bodyToMono(CurrentEntity.class);	
+  		}
 }

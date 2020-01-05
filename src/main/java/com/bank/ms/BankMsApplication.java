@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 
 @SpringBootApplication
 public class BankMsApplication {
-	  static CallWebClient callWeb  = new CallWebClient();
+	/*  static CallWebClient callWeb  = new CallWebClient();
 	  static TimerTask task = new TimerTask() {
 		@Override
 		public void run() {
@@ -32,11 +32,11 @@ public class BankMsApplication {
 				 return Mono.just(p);
 			 }).subscribe();
 		}
-	};
+	};*/
 	public static void main(String[] args) {
 		SpringApplication.run(BankMsApplication.class, args);
-		Timer timer =new  Timer();
-		timer.schedule(task,1000, (60000 * 60) * 24); 
+/*		Timer timer =new  Timer();
+		timer.schedule(task,1000, (60000 * 60) * 24); */
 		
 	}
 
